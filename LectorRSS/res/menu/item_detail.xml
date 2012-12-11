@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_settings"/>
+        -->
+    
+	<item 
+        android:orderInCategory="1" android:id="@+id/back"
+        android:title="@string/back"
+        android:icon="@drawable/ic_back"/>
+	<item
+		android:orderInCategory="2" android:id="@+id/portada"
+		android:showAsAction="ifRoom|withText"
+		android:title="@string/portada" />
+	<item
+		android:orderInCategory="3" android:id="@+id/item3"
+		android:showAsAction="ifRoom|withText"
+		android:title="@string/about" />
+
+</menu>
