@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Lector RSS</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">News!</string>
     <string name="menu_settings">Settings</string>
     <string name="back">Back</string>
     <string name="portada">Portada</string>
     <string name="about">About</string>
+    
+    <string name="ago">Hace</string>
+    <string name="second">segundo</string>
+    <string name="minute">minuto</string>
+    <string name="hour">hora</string>
+    <string name="refresh">Cargando...</string>
+    <color name="item_pubdate">#E0DB68</color>
+    <color name="item_title">#FFFFFF</color>
+    <color name="row_pubdate">#ffaacaFF</color>
 
 </resources>

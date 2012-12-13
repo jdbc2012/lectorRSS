@@ -2,20 +2,27 @@ package es.jdbc.rss;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import es.jdbc.rss.R;
+import es.jdbc.rss.listener.RSSOnItemClickListener;
 
 /**
  * 
@@ -37,7 +44,8 @@ public class RSSConnectionTask extends AsyncTask<URL, Integer, Long>{
 	
 	public static final String ITEM_ENCLOSURE_URL = "enclosure_url";*/
 	
-	protected RSSReaderActivity activity;
+	protected Activity context;
+	
 	protected ProgressDialog dialog;
 	
 	protected String channelTitle;
@@ -48,8 +56,9 @@ public class RSSConnectionTask extends AsyncTask<URL, Integer, Long>{
 	
 	public RSSConnectionTask(RSSReaderActivity activity)
 	{
-		this.activity = activity;
-		this.dialog = activity.getpDialog(); 
+		this.context = (Activity) activity;
+		
+		//this.dialog = activity.getpDialog(); 
 	}
 		
 	/**
@@ -58,8 +67,16 @@ public class RSSConnectionTask extends AsyncTask<URL, Integer, Long>{
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		this.dialog = new ProgressDialog(this.activity);
-		this.dialog.setMessage("Cargando...");
+		
+		//LinearLayout spinnerLayout = (LinearLayout) context.getLayoutInflater().inflate(R.id.header_view_layout, null);
+		//spinnerLayout.setVisibility(View.VISIBLE);
+		
+		//listView.addHeaderView(spinnerLayout);
+		//ProgressBar spinner = (ProgressBar) context.findViewById(R.id.spinner);
+		//spinner.setVisibility(View.VISIBLE);
+		
+		this.dialog = new ProgressDialog(this.context);
+		this.dialog.setMessage(context.getString(R.string.refresh));
 		this.dialog.setIndeterminate(false);
 		this.dialog.setCancelable(false);
 		this.dialog.show();
@@ -76,7 +93,7 @@ public class RSSConnectionTask extends AsyncTask<URL, Integer, Long>{
         long totalSize = 0;
         
         try {
-        	RSSChannel channel = new RSSParser().getChannel(urls[0]);
+        	RSSChannel channel = new RSSParser(this.context).getChannel(urls[0]);
         	channelTitle = channel.getTitle();
         	rssFeedList = channel.getItemList();
 			totalSize = rssFeedList.size();
@@ -85,6 +102,10 @@ public class RSSConnectionTask extends AsyncTask<URL, Integer, Long>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -105,18 +126,18 @@ public class RSSConnectionTask extends AsyncTask<URL, Integer, Long>{
     	
     	if (rssFeedList!=null && !rssFeedList.isEmpty())
     	{	
-    		ListAdapter adapter = new SimpleAdapter(this.activity,
+    		ListAdapter adapter = new SimpleAdapter(this.context,
     												rssFeedList, R.layout.item_row,
-                    								new String[] { RSSParser.ITEM_TITLE},
-                    								new int[] { R.id.title});
+                    								new String[] {RSSParser.ITEM_TITLE, RSSParser.ITEM_PUBDATE },
+                    								new int[] { R.id.row_title, R.id.row_pubdate });
     		
-    		TextView textView = (TextView) this.activity.findViewById(R.id.main_title); 
+    		TextView textView = (TextView) this.context.findViewById(R.id.main_title); 
     		textView.setText(channelTitle.toUpperCase());
     		
-    		ListView listView = (ListView) this.activity.findViewById(R.id.main_list);
+    		ListView listView = (ListView) this.context.findViewById(R.id.main_list);
     		listView.setAdapter(adapter);
     		
-    		listView.setOnItemClickListener(new RSSOnItemClickListener(this.activity, rssFeedList));
+    		listView.setOnItemClickListener(new RSSOnItemClickListener(this.context, rssFeedList));
     	}
     	else
     	{

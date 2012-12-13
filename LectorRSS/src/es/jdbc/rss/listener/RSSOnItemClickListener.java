@@ -1,7 +1,10 @@
-package es.jdbc.rss;
+package es.jdbc.rss.listener;
 
 import java.util.HashMap;
 import java.util.List;
+
+import es.jdbc.rss.RSSItemDetailActivity;
+import es.jdbc.rss.RSSParser;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -40,6 +43,7 @@ public class RSSOnItemClickListener implements OnItemClickListener{
 		newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		newIntent.putExtra(RSSParser.ITEM_ENCLOSURE_URL, audioUrl);
 		newIntent.putExtra(RSSParser.ITEM_TITLE, item.get(RSSParser.ITEM_TITLE));
+		newIntent.putExtra(RSSParser.ITEM_PUBDATE, item.get(RSSParser.ITEM_PUBDATE));
 		newIntent.putExtra(RSSParser.ITEM_DESCRIPTION, item.get(RSSParser.ITEM_DESCRIPTION));
 		this.activity.getApplicationContext().startActivity(newIntent);
 		

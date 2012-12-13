@@ -5,29 +5,51 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.content.Context;
 import android.util.Log;
 
 public class RSSParser {
 
+	private static DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
+	
 	//CHANNEL TAGS
 	public static final String CHANNEL_TITLE = "title";
 	
 	//ITEM TAGS
 	public static final String ITEM_TITLE = "title";
 	public static final String ITEM_LINK = "link";
-	public static final String ITEM_DESCRIPTION = "DESCRIPTION";
+	public static final String ITEM_DESCRIPTION = "description";
+	public static final String ITEM_THUMBNAIL = "thumbnail";
 	public static final String ITEM_CATEGORY = "category";
 	public static final String ITEM_PUBDATE = "pubDate";
 	public static final String ITEM_ENCLOSURE = "enclosure";
 	public static final String ITEM_ENCLOSURE_URL = "enclosure_url";
+	
+	protected Context context;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param context
+	 */
+	public RSSParser(Context context){
+		
+		this.context = context;
+	}
 	
 	/**
      * RSS Parser and reader
@@ -37,8 +59,9 @@ public class RSSParser {
      * 
      * @throws XmlPullParserException
      * @throws IOException
+	 * @throws ParseException 
      */
-	public RSSChannel getChannel(URL url) throws XmlPullParserException, IOException
+	public RSSChannel getChannel(URL url) throws XmlPullParserException, IOException, ParseException
 	{	
 		RSSChannel result = new RSSChannel();
 		
@@ -94,14 +117,12 @@ public class RSSParser {
 		 	eventType = xpp.next(); //move to next element
 		} //while
 		
-		
 		result.setItemList(rssFeedList);
 				
-		
 		return result;
 	}
 	
-	protected void parseItemElement(XmlPullParser xpp, HashMap<String, String> itemData) throws XmlPullParserException, IOException
+	protected void parseItemElement(XmlPullParser xpp, HashMap<String, String> itemData) throws XmlPullParserException, IOException, ParseException
 	{
 		if (xpp.getName().equalsIgnoreCase(ITEM_TITLE)) {
 			
@@ -114,7 +135,9 @@ public class RSSParser {
 			}
 		 else 
 			if (xpp.getName().equalsIgnoreCase(ITEM_PUBDATE)){
-				itemData.put(ITEM_PUBDATE, xpp.nextText());
+				String pubDate = xpp.nextText();
+				String pubAgo = PubDateHelper.getAgoMessage(context, pubDate);
+				itemData.put(ITEM_PUBDATE, pubAgo);
 			}
 		 else 
 			if (xpp.getName().equalsIgnoreCase(ITEM_DESCRIPTION)){
@@ -184,4 +207,5 @@ public class RSSParser {
         }
         return result;
     }
+        
 }

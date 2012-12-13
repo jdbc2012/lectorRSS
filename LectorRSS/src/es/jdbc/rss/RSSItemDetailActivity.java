@@ -1,6 +1,8 @@
 package es.jdbc.rss;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Date;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
@@ -22,13 +24,12 @@ public class RSSItemDetailActivity extends Activity{
 	private ToggleButton playPauseButton;
 	private ImageView imageView;
 	private TextView titleView;
+	private TextView pubDateView;
 	private WebView webView;
 	private TextView descView;
 		
 	protected MediaPlayer mplayer;
 	
-	
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,8 +41,15 @@ public class RSSItemDetailActivity extends Activity{
 		
 		//Item title
 		String title = getIntent().getStringExtra(RSSParser.ITEM_TITLE);
-		titleView = (TextView) findViewById(R.id.title);
-		titleView.setText(title);		
+		titleView = (TextView) findViewById(R.id.item_title);
+		titleView.setText(title);	
+		
+		//Item pubdate
+		String pubDate = getIntent().getStringExtra(RSSParser.ITEM_PUBDATE);
+		
+		pubDateView = (TextView) findViewById(R.id.item_pubdate);
+		pubDateView.setText(pubDate);
+		
 		
 		/*descView = (TextView) findViewById(R.id.description);
 		descView.setText(description);*/

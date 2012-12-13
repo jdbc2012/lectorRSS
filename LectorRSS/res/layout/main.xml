@@ -16,9 +16,9 @@
            android:paddingLeft="10dp"
            android:paddingRight="10dp"
            android:textColor="#FFFFFF"
-           android:background="#72A1BD"
+           android:background="@drawable/radialback"
            android:textStyle="bold"/>
-   
+      
    <ListView
        android:id="@+id/main_list"
        android:layout_width="match_parent"

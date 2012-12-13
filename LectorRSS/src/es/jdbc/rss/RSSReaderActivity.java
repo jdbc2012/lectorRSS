@@ -19,11 +19,11 @@ import android.widget.Toast;
 
 public class RSSReaderActivity extends Activity {
 
-	private ProgressDialog pDialog;	
+	private ProgressDialog spinner;	
 	private ListView view;
 	
 	public ProgressDialog getpDialog() {
-		return pDialog;
+		return spinner;
 	}
 
 	@Override
@@ -80,6 +80,7 @@ public class RSSReaderActivity extends Activity {
 			if (networkInfo!=null && networkInfo.isConnected())
 			{
 				//Read background
+				spinner = new ProgressDialog(this);				
 				RSSConnectionTask networkTask = new RSSConnectionTask(this);
 				networkTask.execute(url);
 			}
